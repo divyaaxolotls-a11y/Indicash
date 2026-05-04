@@ -1,0 +1,63 @@
+[07-Mar-2026 16:04:26 Asia/Kolkata] PHP Warning:  file_get_contents(dmboos.json): failed to open stream: No such file or directory in /home/apluscrm/test_apluscrm_in/admin/config.php on line 82
+[07-Mar-2026 16:04:26 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 126
+[07-Mar-2026 16:04:26 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 137
+[07-Mar-2026 16:04:26 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[07-Mar-2026 16:07:08 Asia/Kolkata] PHP Warning:  file_get_contents(dmboos.json): failed to open stream: No such file or directory in /home/apluscrm/test_apluscrm_in/admin/config.php on line 82
+[07-Mar-2026 16:07:08 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 126
+[07-Mar-2026 16:07:08 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 137
+[07-Mar-2026 16:07:08 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[10-Mar-2026 11:23:01 Asia/Kolkata] PHP Warning:  file_get_contents(dmboos.json): failed to open stream: No such file or directory in /home/apluscrm/test_apluscrm_in/admin/config.php on line 82
+[10-Mar-2026 11:23:01 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 126
+[10-Mar-2026 11:23:01 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 137
+[10-Mar-2026 11:23:01 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[10-Mar-2026 11:28:35 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 126
+[10-Mar-2026 11:28:35 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 137
+[10-Mar-2026 11:28:35 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[10-Mar-2026 11:33:17 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 11:33:20 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 11:33:26 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 128
+[10-Mar-2026 11:33:26 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[10-Mar-2026 11:33:26 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 143
+[10-Mar-2026 11:35:03 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 128
+[10-Mar-2026 11:35:03 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[10-Mar-2026 11:35:03 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 143
+[10-Mar-2026 11:40:26 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 128
+[10-Mar-2026 11:40:26 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[10-Mar-2026 11:40:26 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 143
+[10-Mar-2026 11:42:09 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 11:42:13 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 11:42:17 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 11:42:20 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 11:42:28 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 128
+[10-Mar-2026 11:42:28 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[10-Mar-2026 11:42:28 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 143
+[10-Mar-2026 11:45:33 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 128
+[10-Mar-2026 11:45:33 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/config.php on line 140
+[10-Mar-2026 11:45:33 Asia/Kolkata] PHP Warning:  openssl_sign(): supplied key param cannot be coerced into a private key in /home/apluscrm/test_apluscrm_in/admin/config.php on line 143
+[10-Mar-2026 11:49:17 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 12:25:46 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 12:25:49 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 12:25:51 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 12:32:06 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 365
+[10-Mar-2026 12:34:55 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 371
+[10-Mar-2026 12:37:18 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 371
+[10-Mar-2026 12:38:58 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 364
+[10-Mar-2026 12:55:14 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 375
+[10-Mar-2026 13:07:32 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 376
+[10-Mar-2026 14:25:05 Asia/Kolkata] PHP Notice:  Undefined index: userID in /home/apluscrm/test_apluscrm_in/admin/header.php on line 230
+[10-Mar-2026 14:25:05 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 234
+[10-Mar-2026 14:25:05 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 235
+[10-Mar-2026 14:25:05 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 239
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Notice:  Undefined index: userID in /home/apluscrm/test_apluscrm_in/admin/header.php on line 230
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 234
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 235
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 239
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/apluscrm/test_apluscrm_in/admin/jackpot-declare-result.php on line 376
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Notice:  Undefined index: userID in /home/apluscrm/test_apluscrm_in/admin/header.php on line 230
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 234
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 235
+[10-Mar-2026 14:25:09 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 239
+[10-Mar-2026 14:25:19 Asia/Kolkata] PHP Notice:  Undefined index: userID in /home/apluscrm/test_apluscrm_in/admin/header.php on line 230
+[10-Mar-2026 14:25:19 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 234
+[10-Mar-2026 14:25:19 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 235
+[10-Mar-2026 14:25:19 Asia/Kolkata] PHP Notice:  Trying to access array offset on value of type null in /home/apluscrm/test_apluscrm_in/admin/header.php on line 239

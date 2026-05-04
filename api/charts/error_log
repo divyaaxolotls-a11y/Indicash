@@ -1,0 +1,5 @@
+[09-Feb-2021 06:45:25 America/New_York] PHP Warning:  include(../connection/config.php): failed to open stream: No such file or directory in /home/andrqeah/public_html/projects/doxyplay/appadmin/api/charts/main_bazar_panel.php on line 2
+[09-Feb-2021 06:45:25 America/New_York] PHP Warning:  include(): Failed opening '../connection/config.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/andrqeah/public_html/projects/doxyplay/appadmin/api/charts/main_bazar_panel.php on line 2
+[09-Feb-2021 07:07:26 America/New_York] PHP Notice:  Undefined variable: url in /home/andrqeah/public_html/projects/doxyplay/appadmin/api/charts/main_bazar_panel.php on line 33
+[09-Feb-2021 07:09:24 America/New_York] PHP Notice:  Undefined variable: url in /home/andrqeah/public_html/projects/doxyplay/appadmin/api/charts/main_bazar_panel.php on line 33
+[09-Feb-2021 07:09:35 America/New_York] PHP Notice:  Undefined variable: url in /home/andrqeah/public_html/projects/doxyplay/appadmin/api/charts/main_bazar_panel.php on line 33
