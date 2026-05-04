@@ -1,0 +1,82 @@
+[30-May-2021 06:46:18 America/New_York] PHP Warning:  include(../connection/config.php): failed to open stream: No such file or directory in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 2
+[30-May-2021 06:46:18 America/New_York] PHP Warning:  include(): Failed opening '../connection/config.php' for inclusion (include_path='.:/opt/alt/php72/usr/share/pear') in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 2
+[30-May-2021 06:46:18 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 6
+[30-May-2021 16:16:42 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:16:42 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:17:40 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:17:40 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:17:52 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:17:52 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:21:15 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:21:15 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:21:53 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:21:53 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:21:53 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:21:53 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:18 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:18 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:18 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:18 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:22:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:25 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:25 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:25 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:25 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:25 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:52 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:52 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:52 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:52 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:23:52 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:26:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:26:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:26:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:26:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:26:55 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:27:06 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:27:06 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:27:06 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:27:06 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:27:06 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:28:08 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:28:08 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:28:08 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:28:08 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:28:08 Asia/Kolkata] PHP Notice:  Undefined index: open in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 9
+[30-May-2021 16:36:32 Asia/Kolkata] PHP Notice:  Undefined variable: data in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[30-May-2021 16:36:32 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[30-May-2021 16:36:32 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[30-May-2021 16:36:36 Asia/Kolkata] PHP Notice:  Undefined variable: data in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[30-May-2021 16:36:36 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[30-May-2021 16:36:36 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[30-May-2021 16:36:39 Asia/Kolkata] PHP Notice:  Undefined variable: data in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[30-May-2021 16:36:39 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[30-May-2021 16:36:39 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[31-May-2021 13:14:53 Asia/Kolkata] PHP Notice:  Undefined index: result in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[31-May-2021 13:14:53 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[31-May-2021 13:14:53 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[31-May-2021 14:06:52 Asia/Kolkata] PHP Notice:  Undefined index: result in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[31-May-2021 14:06:52 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[31-May-2021 14:06:52 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[04-Jun-2021 09:43:34 Asia/Kolkata] PHP Notice:  Undefined index: result in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 09:43:34 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 09:43:34 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[04-Jun-2021 09:53:10 Asia/Kolkata] PHP Notice:  Undefined index: result in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 09:53:10 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 09:53:10 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[04-Jun-2021 10:13:29 Asia/Kolkata] PHP Notice:  Undefined index: result in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 10:13:29 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 10:13:29 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[04-Jun-2021 10:14:11 Asia/Kolkata] PHP Notice:  Undefined index: result in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 10:14:11 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 10:14:11 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 55
+[04-Jun-2021 10:22:12 Asia/Kolkata] PHP Notice:  Undefined index: result in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 10:22:12 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 53
+[04-Jun-2021 10:22:12 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/host0032/public_html/cmm_starline/appadmin/api/chart/getChart.php on line 55

@@ -1,0 +1,140 @@
+[26-Aug-2021 17:56:10 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/andrqeah/public_html/projects/betplay_broker/admin/connection/lib/database.php on line 30
+[26-Aug-2021 17:56:10 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/andrqeah/public_html/projects/betplay_broker/admin/connection/lib/database.php on line 30
+[26-Aug-2021 17:56:10 Asia/Kolkata] PHP Notice:  Undefined variable: data in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 53
+[26-Aug-2021 17:56:10 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 53
+[26-Aug-2021 17:56:10 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 55
+[26-Aug-2021 17:56:13 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/andrqeah/public_html/projects/betplay_broker/admin/connection/lib/database.php on line 30
+[26-Aug-2021 17:56:13 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/andrqeah/public_html/projects/betplay_broker/admin/connection/lib/database.php on line 30
+[26-Aug-2021 17:56:13 Asia/Kolkata] PHP Notice:  Undefined variable: data in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 53
+[26-Aug-2021 17:56:13 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 53
+[26-Aug-2021 17:56:13 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 55
+[26-Aug-2021 18:09:14 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/andrqeah/public_html/projects/betplay_broker/admin/connection/lib/database.php on line 30
+[26-Aug-2021 18:09:14 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/andrqeah/public_html/projects/betplay_broker/admin/connection/lib/database.php on line 30
+[26-Aug-2021 18:09:14 Asia/Kolkata] PHP Notice:  Undefined variable: data in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 53
+[26-Aug-2021 18:09:14 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 53
+[26-Aug-2021 18:09:14 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 55
+[26-Aug-2021 18:09:21 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/andrqeah/public_html/projects/betplay_broker/admin/connection/lib/database.php on line 30
+[26-Aug-2021 18:09:21 Asia/Kolkata] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/andrqeah/public_html/projects/betplay_broker/admin/connection/lib/database.php on line 30
+[26-Aug-2021 18:09:21 Asia/Kolkata] PHP Notice:  Undefined variable: data in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 53
+[26-Aug-2021 18:09:21 Asia/Kolkata] PHP Warning:  array_keys() expects parameter 1 to be array, null given in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 53
+[26-Aug-2021 18:09:21 Asia/Kolkata] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/andrqeah/public_html/projects/betplay_broker/api/chart/getChart.php on line 55
+[27-Jan-2023 07:52:10 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 08:07:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 08:07:47 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 08:07:56 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 08:08:07 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 13:15:22 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 13:15:28 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 13:15:32 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 14:05:54 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 14:06:01 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 14:06:04 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 14:06:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 14:06:51 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[27-Jan-2023 14:06:53 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[28-Jan-2023 07:54:51 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[28-Jan-2023 07:55:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[28-Jan-2023 07:55:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[28-Jan-2023 08:12:29 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[29-Jan-2023 00:21:26 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[31-Jan-2023 06:44:55 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[31-Jan-2023 06:47:13 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[01-Feb-2023 20:16:55 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[09-Feb-2023 19:57:25 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[11-Feb-2023 05:03:23 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[11-Feb-2023 14:10:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[11-Feb-2023 15:38:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[11-Feb-2023 16:06:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[12-Feb-2023 00:39:08 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[12-Feb-2023 05:22:14 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
+[13-Feb-2023 05:18:41 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function query() in /home/milanmad/public_html/api/chart2/getChart.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/milanmad/public_html/api/chart2/getChart.php on line 13
