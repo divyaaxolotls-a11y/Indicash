@@ -1,0 +1,23 @@
+# Hosting metadata
+.ovi-knowns/
+
+# Logs
+error_log
+*.log
+*.txt
+
+# PHP sessions
+admin/admin_sessions/
+
+# Cache
+cache/
+hts-cache/
+Indicash Backend/CHART/panel/cache/
+
+# APKs
+*.apk
+
+# Google Service Account Keys
+Indicash Backend/demodmboss.json
+Indicash Backend/admin/dmboos.json
+Indicash Backend/admin/demodmboss.json
