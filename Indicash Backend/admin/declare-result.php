@@ -1,0 +1,966 @@
+<?php 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+include('header.php'); 
+include('config.php'); 
+
+function pay_winner($con, $bet, $win_amt, $market, $win_no, $batch_id, $stamp) {
+    $user = $bet['user'];
+    $sn = $bet['sn'];
+    
+    // Fetch user wallet
+    $user_res = mysqli_query($con, "SELECT wallet, fcm_token FROM users WHERE mobile='$user' LIMIT 1");
+    $u_data = mysqli_fetch_assoc($user_res);
+    $wallet_before = (float)($u_data['wallet'] ?? 0);
+    $wallet_after  = $wallet_before + $win_amt;
+
+    // Update Wallet and Game Status
+    mysqli_query($con, "UPDATE users SET wallet = '$wallet_after' WHERE mobile = '$user'");
+    mysqli_query($con, "UPDATE games SET status='1', win_amount='$win_amt', is_loss='0' WHERE sn='$sn'");
+    
+    // Log Transaction
+    $remrk = "Game:".$bet['game']." | Market:".$market." | Number:".$win_no." | Result Win";
+    mysqli_query($con, "INSERT INTO `transactions`(`user`, `amount`, `wallet_before`, `wallet_after`, `type`, `remark`, `created_at`,`batch_id`,`game_id`) 
+    VALUES ('$user','$win_amt','$wallet_before','$wallet_after','1','$remrk','$stamp','$batch_id','$sn')");
+    
+    if (function_exists('sendNotification') && !empty($u_data['fcm_token'])) {
+        // sendNotification("Congratulations", "You won ₹$win_amt on $market", $u_data['fcm_token']);
+    }
+}
+
+// -------------------------------------------------------------------------
+// 1. SAFEGUARD: Define log_action if missing
+// -------------------------------------------------------------------------
+if (!function_exists('log_action')) {
+    function log_action($action) {
+        global $con;
+        $timestamp = date('Y-m-d H:i:s');
+        $admin_id = isset($_SESSION['id']) ? $_SESSION['id'] : 0; 
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $q = "INSERT INTO `admin_logs` (`admin_id`, `action`, `ip`, `created_at`) VALUES ('$admin_id', '$action', '$ip', '$timestamp')";
+        @mysqli_query($con, $q); 
+    }
+}
+function isGameOpenOnDate($days_string, $date_value) {
+    // 1. Get the Day of the week for the selected date (e.g., "MONDAY")
+    $day_of_week = strtoupper(date('l', strtotime($date_value)));
+    
+    // 2. Search for the pattern "DAYNAME(CLOSED)"
+    $search_pattern = $day_of_week . "(CLOSED)";
+    
+    // 3. If "(CLOSED)" is NOT found for that day, the game is open
+    if (strpos($days_string, $search_pattern) === false) {
+        return true; 
+    }
+    return false;
+}
+
+// -------------------------------------------------------------------------
+// 3. LOGIC: MANUAL SUBMISSION REDIRECT
+// -------------------------------------------------------------------------
+if(isset($_REQUEST['submit_manual2'])){
+    extract($_REQUEST);
+    echo "<script>window.location.href = 'winners.php?date=$date&session=$session&digit=$digit&panna=$panna&market=$market'</script>";
+}
+
+// -------------------------------------------------------------------------
+// REVERT RESULT & RECOVER WINNINGS
+// -------------------------------------------------------------------------
+if(isset($_POST['cancel_game_refund'])){
+    
+    // Security Check
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        echo "<script>alert('Invalid CSRF token.'); window.location.href = 'declare-result.php';</script>"; exit;
+    }
+
+    $market = mysqli_real_escape_string($con, trim($_POST['market']));
+    $session = mysqli_real_escape_string($con, $_POST['session']);
+    $date = date('d/m/Y', strtotime($_POST['date']));
+    
+    // 1. Identify the Batch ID or the Results to delete
+    $res_query = mysqli_query($con, "SELECT * FROM manual_market_results WHERE market='$market' AND date='$date'");
+    $existing_result = mysqli_fetch_array($res_query);
+
+    if($existing_result){
+
+        $market_norm = str_replace(" ", "_", $market);
+        $m_open   = $market_norm . "_OPEN";
+        $m_close  = $market_norm . "_CLOSE";
+        $m_jodi_a = $market_norm;        // e.g. MADHUR_NIGHT
+        $m_jodi_b = $market_norm . "_";  // e.g. MADHUR_NIGHT_ (legacy trailing-underscore bets)
+        $bazar_query = "AND (`bazar`='$m_open' OR `bazar`='$m_close' OR `bazar`='$m_jodi_a' OR `bazar`='$m_jodi_b')";
+
+        // 3. GET ALL WINNERS AND DEDUCT MONEY
+        $winners = mysqli_query($con, "SELECT * FROM `games` WHERE `date`='$date' $bazar_query AND `status`='1' AND `is_loss`='0'");
+        while($w = mysqli_fetch_array($winners)){
+            $mobile = $w['user'];
+            $game_id = $w['sn'];
+
+            // FIXED: Search by game_id only, no remark filter
+            // because remark format changed from 'Winning' to 'Result Win'
+            $tx_check = mysqli_query($con, "SELECT * FROM transactions WHERE game_id='$game_id' AND type='1' LIMIT 1");
+            if($tx_row = mysqli_fetch_array($tx_check)){
+                $win_amount = $tx_row['amount'];
+                
+                // Deduct from wallet
+                mysqli_query($con, "UPDATE users SET wallet = wallet - '$win_amount' WHERE mobile = '$mobile'");
+                
+                // Delete ALL transactions for this game_id (handles both old and new format)
+                mysqli_query($con, "DELETE FROM transactions WHERE game_id='$game_id' AND type='1'");
+            }
+        }
+
+        // 4. RESET GAMES STATUS (Set back to pending and remove loss status)
+        mysqli_query($con, "UPDATE `games` 
+            SET `status`='0', 
+                `is_loss`='0',
+                `win_amount` = 0
+            WHERE `date`='$date' $bazar_query");
+
+        // 5. REMOVE THE DECLARED RESULT
+        if($session == 'open'){
+            // If reverting open, we usually clear open fields
+            mysqli_query($con, "UPDATE manual_market_results SET open='', open_panna='' WHERE market='$market' AND date='$date'");
+        } else {
+            // If reverting close, clear close fields
+            mysqli_query($con, "UPDATE manual_market_results SET close='', close_panna='' WHERE market='$market' AND date='$date'");
+        }
+        
+        // Final cleanup: if both open and close are empty, delete the row
+        mysqli_query($con, "DELETE FROM manual_market_results WHERE market='$market' AND date='$date' AND open='' AND close=''");
+
+        log_action("Reverted Result for $market $session - Winnings Deducted");
+        echo "<script>alert('✅ Result Reverted! Winnings deducted from users and buttons restored.'); window.location.href = 'declare-result.php';</script>";
+
+    } else {
+        echo "<script>alert('⚠️ No result found to revert.'); window.location.href = 'declare-result.php';</script>";
+    }
+    exit;
+}
+
+// -------------------------------------------------------------------------
+// 5. LOGIC: DECLARE RESULT (Main Functionality) — FIXED VERSION
+// -------------------------------------------------------------------------
+
+if(isset($_REQUEST['submit_manual'])){
+    if (!isset($_REQUEST['csrf_token']) || $_REQUEST['csrf_token'] !== $_SESSION['csrf_token']) {
+        echo "<script>alert('Invalid CSRF token.'); window.location.href = 'declare-result.php';</script>"; exit; 
+    }
+    
+    extract($_REQUEST);
+
+    // ---------------------------------------------------------------
+    // FIX #1: clean the market name ONCE, right here, before anything
+    // else touches it. Every bazar string built below uses this.
+    // ---------------------------------------------------------------
+    $market = trim($market);
+    $market = mysqli_real_escape_string($con, $market);
+
+    $date = date('d/m/Y', strtotime($_REQUEST['date']));
+
+    // 1. Set Open/Close values
+    if($session == 'open'){
+        $open = trim($digit); $opanna = trim($panna);
+        if($open == "" && $opanna == ""){ echo "<script>alert('Result cannot be empty'); window.location.href='declare-result.php';</script>"; exit(); }
+        $close = ""; $cpanna = "";
+    } else {
+        $chk_query = mysqli_query($con, "select * from manual_market_results where market='$market' AND date='$date'");
+        $chk_res = mysqli_fetch_array($chk_query);
+        if(!$chk_res){ echo "<script>alert('Error: Please Declare Open Result First!'); window.location.href='declare-result.php';</script>"; exit(); }
+        $open = $chk_res['open']; $opanna = $chk_res['open_panna'];
+        $close = trim($digit); $cpanna = trim($panna);
+    }
+    
+    // 2. Update Result Table
+    $chk_query = mysqli_query($con, "select sn from manual_market_results where market='$market' AND date='$date'");
+    if(mysqli_num_rows($chk_query) > 0){
+        $chk_res = mysqli_fetch_array($chk_query); $sn = $chk_res['sn'];
+        mysqli_query($con, "update manual_market_results set close='$close', close_panna='$cpanna' where sn='$sn'");
+    } else {
+        mysqli_query($con, "INSERT INTO `manual_market_results`(`market`, `date`, `open_panna`, `open`, `close`, `close_panna`, `created_at`) VALUES ('$market','$date','$opanna','$open','$close','$cpanna','$stamp')");
+    }
+    
+    $batch_id = md5($stamp.$market.rand().$open.$close.$date);
+
+    // ---------------------------------------------------------------
+    // Rate lookup — guarded now. If this table/row is missing we no
+    // longer let PHP die silently mid-script; we default every rate
+    // to 0 and keep going, so win/loss resolution ALWAYS completes
+    // for every section below regardless of the rate table's state.
+    // ---------------------------------------------------------------
+    $xvm = mysqli_query($con, "select * from rate where sn='1'");
+    $xv  = $xvm ? mysqli_fetch_array($xvm) : false;
+    if (!$xv) {
+        $xv = ['single'=>0,'jodi'=>0,'singlepatti'=>0,'doublepatti'=>0,'triplepatti'=>0,'halfsangam'=>0,'fullsangam'=>0];
+        log_action("WARNING: rate table row missing/unreadable — used 0 rates for $market $session on $date");
+    }
+
+    // ---------------------------------------------------------------
+    // FIX #2: build every bazar variant ONCE, from the same cleaned
+    // $market, the same way, no matter which section uses it.
+    // The _OPEN/_CLOSE suffix is appended AFTER the space->underscore
+    // swap, so a trailing space in $market can never create a double
+    // underscore that breaks matching (this was the root cause of
+    // MADHUR NIGHT Panna bets and MILAN NIGHT Single bets staying
+    // stuck on pending).
+    // ---------------------------------------------------------------
+    $mrk_open  = str_replace(" ", "_", $market) . "_OPEN";
+    $mrk_close = str_replace(" ", "_", $market) . "_CLOSE";
+    $mrk_jodi  = str_replace(" ", "_", $market);
+
+    // ==========================================
+    // SECTION 1: OPEN DIGIT (SINGLE ONLY)
+    // ==========================================
+    if($open != ""){
+        $xx = mysqli_query($con, "SELECT * FROM games WHERE bazar='$mrk_open' AND game='single' AND date='$date' AND number LIKE '%$open%' AND status='0'");
+        while($x = mysqli_fetch_assoc($xx)){
+            pay_winner($con, $x, ($x['amount'] * $xv['single']), $market, $open, $batch_id, $stamp);
+        }
+        mysqli_query($con, "UPDATE games SET is_loss='1', status='1' WHERE bazar='$mrk_open' AND game='single' AND date='$date' AND number NOT LIKE '%$open%' AND status='0'");
+    }
+    
+    // ==========================================
+    // SECTION 2: OPEN PANNA (PATTI ONLY)
+    // ==========================================
+    if($opanna != ""){
+        $xx = mysqli_query($con, "SELECT * FROM games WHERE bazar='$mrk_open' AND game IN ('singlepatti','doublepatti','triplepatti') AND date='$date' AND number='$opanna' AND status='0'");
+        while($x = mysqli_fetch_assoc($xx)){
+            pay_winner($con, $x, ($x['amount'] * $xv[$x['game']]), $market, $opanna, $batch_id, $stamp);
+        }
+        mysqli_query($con, "UPDATE games SET is_loss='1', status='1' WHERE bazar='$mrk_open' AND game IN ('singlepatti','doublepatti','triplepatti') AND date='$date' AND number != '$opanna' AND status='0'");
+    }
+
+    // ==========================================
+    // SECTION 3: CLOSE DIGIT (SINGLE ONLY)
+    // ==========================================
+    if($close != ""){
+        $xx = mysqli_query($con, "SELECT * FROM games WHERE bazar='$mrk_close' AND game='single' AND date='$date' AND number LIKE '%$close%' AND status='0'");
+        while($x = mysqli_fetch_assoc($xx)){
+            pay_winner($con, $x, ($x['amount'] * $xv['single']), $market, $close, $batch_id, $stamp);
+        }
+        mysqli_query($con, "UPDATE games SET is_loss='1', status='1' WHERE bazar='$mrk_close' AND game='single' AND date='$date' AND number NOT LIKE '%$close%' AND status='0'");
+    }
+
+    // ==========================================
+    // SECTION 4: CLOSE PANNA (PATTI ONLY)
+    // ==========================================
+    if($cpanna != ""){
+        $xx = mysqli_query($con, "SELECT * FROM games WHERE bazar='$mrk_close' AND game IN ('singlepatti','doublepatti','triplepatti') AND date='$date' AND number='$cpanna' AND status='0'");
+        while($x = mysqli_fetch_assoc($xx)){
+            pay_winner($con, $x, ($x['amount'] * $xv[$x['game']]), $market, $cpanna, $batch_id, $stamp);
+        }
+        mysqli_query($con, "UPDATE games SET is_loss='1', status='1' WHERE bazar='$mrk_close' AND game IN ('singlepatti','doublepatti','triplepatti') AND date='$date' AND number != '$cpanna' AND status='0'");
+    }
+
+    // ==========================================
+    // SECTION 5: JODI, HALF SANGAM & FULL SANGAM
+    // ==========================================
+    if($open != "" && $close != ""){
+        
+        // 1. JODI: Must match both digits exactly
+        $win_jodi = $open.$close;
+        $xx = mysqli_query($con, "SELECT * FROM games WHERE bazar='$mrk_jodi' AND game='jodi' AND date='$date' AND number='$win_jodi' AND status='0'");
+        while($x = mysqli_fetch_assoc($xx)){
+            pay_winner($con, $x, ($x['amount'] * $xv['jodi']), $market, $win_jodi, $batch_id, $stamp);
+        }
+        mysqli_query($con, "UPDATE games SET is_loss='1', status='1' WHERE bazar='$mrk_jodi' AND game='jodi' AND date='$date' AND number != '$win_jodi' AND status='0'");
+
+        // 2. HALF SANGAM: Strict pattern matching
+        $h_win1 = $opanna . "-" . $close;
+        $h_win2 = $open . "-" . $cpanna;
+        $xx = mysqli_query($con, "SELECT * FROM games WHERE bazar='$mrk_jodi' AND game='halfsangam' AND date='$date' AND status='0'");
+        while($x = mysqli_fetch_assoc($xx)){
+            // We use === to ensure it's not a partial match
+            if($x['number'] === $h_win1 || $x['number'] === $h_win2) {
+                pay_winner($con, $x, ($x['amount'] * $xv['halfsangam']), $market, $x['number'], $batch_id, $stamp);
+            } else {
+                mysqli_query($con, "UPDATE games SET is_loss='1', status='1' WHERE sn='".$x['sn']."'");
+            }
+        }
+
+        // 3. FULL SANGAM: Strict pattern matching
+        $f_win = $opanna . "-" . $cpanna;
+        $xx = mysqli_query($con, "SELECT * FROM games WHERE bazar='$mrk_jodi' AND game='fullsangam' AND date='$date' AND status='0'");
+        while($x = mysqli_fetch_assoc($xx)){
+            if($x['number'] === $f_win) {
+                pay_winner($con, $x, ($x['amount'] * $xv['fullsangam']), $market, $f_win, $batch_id, $stamp);
+            } else {
+                mysqli_query($con, "UPDATE games SET is_loss='1', status='1' WHERE sn='".$x['sn']."'");
+            }
+        }
+    }
+    
+    $session_label = strtoupper($session); // OPEN or CLOSE
+    
+    // Construct the Result String
+    // Format Example: 140 - 5
+    $result_str = $panna . " - " . $digit;
+
+    $notif_title = "Result Declared: $market";
+    $notif_body  = "Result for $market ($session_label) is declared: $result_str. Check your wins now!";
+
+    if (function_exists('sendNotification')) {
+        // We send to target 'all' which triggers the /topics/all in config.php
+        sendNotification($notif_title, $notif_body, 'all');
+    }
+    
+    echo "<script>alert('Result Declared Successfully!'); window.location.href = 'declare-result.php';</script>";
+    exit;
+}
+?>
+
+<style>
+    /* ===== BASE ===== */
+    body { background-color: #f1f1f1; }
+
+    .content-wrapper {
+        overflow-x: hidden;
+    }
+
+    /* Remove default container padding on mobile */
+    @media (max-width: 576px) {
+        .content-wrapper { padding: 8px !important; }
+        .container-fluid { padding-left: 4px !important; padding-right: 4px !important; }
+    }
+
+    /* ===== GAME LIST WRAPPER ===== */
+    .game-list-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0 8px;
+    }
+
+    /* ===== DATE FILTER ===== */
+    .date-filter-box {
+        border-radius: 20px;
+        padding: 8px 16px;
+        border: 1px solid #ddd;
+        margin-bottom: 16px;
+        text-align: center;
+        background: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .date-filter-box input {
+        border: none;
+        background: transparent;
+        font-weight: bold;
+        color: #555;
+        outline: none;
+        text-align: center;
+        font-size: 15px;
+        width: 100%;
+    }
+
+    /* ===== GAME BUTTON HEADER ===== */
+    .game-button-header {
+        background: linear-gradient(180deg, #ffc107 0%, #ff9800 100%);
+        border-radius: 8px;
+        width: 100%;
+        padding: 12px 15px;
+        margin-bottom: 6px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        cursor: pointer;
+        display: block;
+        color: #212529;
+        text-decoration: none !important;
+    }
+
+    .game-button-header:hover { text-decoration: none !important; color: #212529; }
+
+    .game-name {
+        font-weight: 800;
+        font-size: 1rem;
+        text-transform: uppercase;
+        color: #000;
+    }
+
+    .game-date {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* ===== COLLAPSE DETAILS CARD ===== */
+    .game-details-card {
+        background: #fff;
+        border-radius: 0 0 8px 8px;
+        margin-top: -6px;
+        margin-bottom: 14px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: 1px solid #ddd;
+        border-top: none;
+        overflow: hidden;
+    }
+
+    .details-header-row {
+        background-color: #343a40;
+        color: #fff;
+        font-weight: bold;
+        padding: 8px 0;
+        font-size: 14px;
+    }
+
+    .time-text {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .vertical-divider { border-right: 2px solid #dee2e6; }
+
+    /* ===== ACTION BUTTONS INSIDE CARD ===== */
+    .btn-custom {
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.82rem;
+        padding: 6px 10px;
+        width: 92%;
+        margin-bottom: 6px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .btn-add     { background-color: #17a2b8; color: white; border: none; }
+    .btn-report  { background-color: #28a745; color: white; border: none; }
+
+    .btn-revert {
+        border-radius: 20px;
+        width: 92%;
+        font-size: 0.8rem;
+        display: block;
+        margin: 4px auto 0;
+        padding: 5px 10px;
+    }
+.custom-popup-overlay {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    align-items: center;
+    justify-content: center;
+}
+.custom-popup-content {
+    background-color: #fff;
+    width: 90%;
+    max-width: 340px;
+    padding: 30px 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+.popup-title { font-size: 18px; color: #666; margin-bottom: 2px; }
+.popup-market { font-size: 20px; font-weight: 500; margin-bottom: 2px; color: #333; }
+.popup-date { font-size: 18px; margin-bottom: 5px; color: #333; }
+.popup-label { font-size: 18px; margin-bottom: 10px; color: #333; }
+
+.custom-popup-input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 2px solid #99ccff; /* Light blue border from your screenshot */
+    border-radius: 6px;
+    font-size: 22px;
+    text-align: center;
+    outline: none;
+}
+.popup-btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+.btn-ok {
+    background-color: #7d67cf; /* Purple from screenshot */
+    color: white; border: none;
+    padding: 10px 0; border-radius: 6px;
+    font-weight: bold; flex: 1; font-size: 16px;
+}
+.btn-cancel {
+    background-color: #7a7a7a; /* Gray from screenshot */
+    color: white; border: none;
+    padding: 10px 0; border-radius: 6px;
+    font-weight: bold; flex: 1; font-size: 16px;
+}
+.collapse {
+    transition: all 0.35s ease;
+}
+.game-button-header:active {
+    opacity: 0.8;
+    transform: scale(0.98); /* Slight click effect */
+}
+    /* ===== MOBILE TWEAKS ===== */
+    @media (max-width: 480px) {
+        .game-list-container { padding: 0 2px; }
+
+        .game-button-header { padding: 10px 12px; }
+
+        .game-name  { font-size: 0.9rem; }
+        .game-date  { font-size: 0.78rem; }
+
+        .details-header-row { font-size: 13px; }
+        .time-text  { font-size: 0.85rem; }
+
+        .btn-custom { font-size: 0.78rem; padding: 5px 8px; width: 96%; }
+        .btn-revert { font-size: 0.75rem; width: 96%; }
+
+        /* Equal column padding on very small screens */
+        .game-details-card .col-6 { padding-left: 6px; padding-right: 6px; }
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="game-list-container">
+
+            <!-- Date Filter -->
+            <form method="get">
+                <div class="date-filter-box">
+                    <input type="date" name="date"
+                           value="<?php echo isset($_REQUEST['date']) ? $_REQUEST['date'] : date('Y-m-d'); ?>"
+                           onchange="this.form.submit()">
+                </div>
+            </form>
+
+            <?php
+            $selectedDate = isset($_REQUEST['date']) ? $_REQUEST['date'] : date('Y-m-d');
+            $formattedDate = date('d/m/Y', strtotime($selectedDate));
+
+            $all_games = [];
+            $q1 = mysqli_query($con, "SELECT * FROM `gametime_new` ORDER BY str_to_date(open, '%H:%i')");
+            while($r = mysqli_fetch_assoc($q1)) { $all_games[] = $r; }
+            $q2 = mysqli_query($con, "SELECT * FROM `gametime_manual` ORDER BY str_to_date(open, '%H:%i')");
+            while($r = mysqli_fetch_assoc($q2)) { $all_games[] = $r; }
+
+            $uniqueId = 0;
+            foreach($all_games as $game_row){
+                
+                if(isset($game_row['active']) && $game_row['active'] == 0) {
+                    continue; // Skip this game
+                }
+
+                // 2. Check if the game is "CLOSED" on this specific day of the week
+                if (!isGameOpenOnDate($game_row['days'], $selectedDate)) {
+                    continue; // Skip this game (it's closed today)
+                }
+                $uniqueId++;
+                $marketName = trim($game_row['market']);
+                $xc = getOpenCloseTiming($game_row); 
+                $res_chk = mysqli_query($con, "SELECT * FROM manual_market_results WHERE market='$marketName' AND date='$formattedDate'");
+                $existing_result = mysqli_fetch_array($res_chk);
+                
+                $open_res  = (isset($existing_result['open'])  && $existing_result['open']  != "") ? $existing_result['open_panna']."-".$existing_result['open']  : "";
+                $close_res = (isset($existing_result['close']) && $existing_result['close'] != "") ? $existing_result['close']."-".$existing_result['close_panna'] : "";
+            ?>
+
+              <div class="game-button-header" 
+                     data-toggle="collapse" 
+                     data-bs-toggle="collapse" 
+                     data-target="#gameCollapse<?php echo $uniqueId; ?>" 
+                     data-bs-target="#gameCollapse<?php echo $uniqueId; ?>" 
+                     style="cursor: pointer;">
+                    <div class="game-name"><?php echo $marketName; ?></div>
+                    <div class="game-date"><?php echo $formattedDate; ?></div>
+              </div>
+                
+               <?php 
+                    // 1. Get current server time
+                    $now = date('H:i'); 
+                    
+                    // 2. Get market close time in 24h format for comparison
+                    $marketCloseTime = date('H:i', strtotime($xc['close']));
+                
+                    // 3. Logic: If (Open & Close results are both declared) OR (Current time is past Close time)
+                    // Then hide the details (remove 'show')
+                    $isFinished = ($open_res != "" && $close_res != "") || ($now > $marketCloseTime);
+                    
+                    $collapseClass = ($isFinished) ? "" : "show"; 
+                ?>
+                <div class="collapse <?php echo $collapseClass; ?>" id="gameCollapse<?php echo $uniqueId; ?>">
+                    <div class="game-details-card">
+                        <div class="row m-0 details-header-row text-center">
+                            <div class="col-6 border-right border-secondary">Open</div>
+                            <div class="col-6">Close</div>
+                        </div>
+                        
+                        <div class="row m-0 text-center py-3">
+                            
+                            <!-- OPEN column -->
+                            <div class="col-6 vertical-divider">
+                                <span class="time-text"><?php echo date('h:i A', strtotime($xc['open'])); ?></span>
+                                
+                                <?php if($open_res != "") { ?>
+                                    <!-- Result is Declared: Show Result and Revert Button -->
+                                    <div class="btn btn-primary btn-custom mb-2"><?php echo $open_res; ?></div>
+                                    
+                                    <button type="button" class="btn btn-report btn-custom"
+                                            onclick="showBetReport('<?php echo $marketName; ?>', '<?php echo $selectedDate; ?>', 'Open')">Open Report</button>
+                                    
+                                    <!-- Revert button only shows here now -->
+                                    <button type="button" class="btn btn-danger btn-sm btn-revert open-refund-modal"
+                                            data-market="<?php echo $marketName; ?>"
+                                            data-session="open"
+                                            data-date="<?php echo $selectedDate; ?>">Revert Open Bid</button>
+                                            
+                                <?php } else { ?>
+                                    <!-- No Result: Show Add Result and Report, but NO Revert -->
+                                    <button type="button" class="btn btn-add btn-custom open-modal-btn"
+                                            data-market="<?php echo $marketName; ?>"
+                                            data-session="open"
+                                            data-date="<?php echo $selectedDate; ?>">Add Open Result</button>
+                                            
+                                    <button type="button" class="btn btn-report btn-custom"
+                                            onclick="showBetReport('<?php echo $marketName; ?>', '<?php echo $selectedDate; ?>', 'Open')">Open Report</button>
+                                <?php } ?>
+                            </div>
+                            
+                            <!-- CLOSE column -->
+                            <div class="col-6">
+                                <span class="time-text"><?php echo date('h:i A', strtotime($xc['close'])); ?></span>
+                                
+                                <?php if($close_res != "") { ?>
+                                    <!-- Result is Declared: Show Result and Revert Button -->
+                                    <div class="btn btn-primary btn-custom mb-2"><?php echo $close_res; ?></div>
+                                    
+                                    <button type="button" class="btn btn-report btn-custom"
+                                            onclick="showBetReport('<?php echo $marketName; ?>', '<?php echo $selectedDate; ?>', 'Close')">Close Report</button>
+                                    
+                                    <!-- Revert button only shows here now -->
+                                    <button type="button" class="btn btn-danger btn-sm btn-revert open-refund-modal"
+                                            data-market="<?php echo $marketName; ?>"
+                                            data-session="close"
+                                            data-date="<?php echo $selectedDate; ?>">Revert Close Bid</button>
+                                            
+                                <?php } else { ?>
+                                    <!-- No Result: Show Add Result and Report, but NO Revert -->
+                                    <button type="button" class="btn btn-add btn-custom open-modal-btn"
+                                            data-market="<?php echo $marketName; ?>"
+                                            data-session="close"
+                                            data-date="<?php echo $selectedDate; ?>">Add Close Result</button>
+                                            
+                                    <button type="button" class="btn btn-report btn-custom"
+                                            onclick="showBetReport('<?php echo $marketName; ?>', '<?php echo $selectedDate; ?>', 'Close')">Close Report</button>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <?php } ?>
+        </div>
+    </div>
+</section>
+
+<div id="resultPopup" class="custom-popup-overlay">
+    <div class="custom-popup-content">
+        <div class="popup-title">Post Result</div>
+        <div id="disp_market_name" class="popup-market"></div>
+        <div id="disp_date" class="popup-date"></div>
+        <div class="popup-label">Ank : <span id="ank_val_display" style="font-weight:bold;"></span></div>
+        <form id="popupForm" method="post">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="market"  id="hidden_market">
+            <input type="hidden" name="session" id="hidden_session">
+            <input type="hidden" name="date"    id="hidden_date">
+            <!-- This hidden input sends the calculated Digit (Ank) to your PHP -->
+            <input type="hidden" name="digit"   id="hidden_digit">
+            
+            <input type="number" name="panna" id="main_input" class="custom-popup-input" required autofocus>
+            
+            <div class="popup-btn-container">
+                <button type="submit" name="submit_manual" class="btn-ok">OK</button>
+                <button type="button" class="btn-cancel" onclick="closePopup()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Refund Modal -->
+<div class="modal fade" id="refundModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">⚠ Confirm Game Refund</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="date"    id="refund_date">
+            <input type="hidden" name="market"  id="refund_market">
+            <input type="hidden" name="session" id="refund_session">
+            <div class="text-center">
+                <p>Are you sure you want to <strong>CANCEL</strong> the game and <strong>REFUND</strong> all bets?</p>
+                <h4 id="refundGameName" class="font-weight-bold text-danger"></h4>
+                <span class="badge badge-secondary" id="refundSessionDisplay"></span>
+                <p class="text-muted mt-2"><small>This action will delete all bets for this session and credit money back to user wallets.</small></p>
+            </div>
+            <div class="mt-4">
+                <button name="cancel_game_refund" type="submit" class="btn btn-danger btn-block font-weight-bold">YES, REFUND ALL</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bet Details Modal -->
+<div class="modal fade" id="betDetailsModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Bet Records: <span id="reportGameName"></span></h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body p-0">
+        <table class="table table-striped mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th>User (Mobile)</th>
+              <th>Game Type</th>
+              <th>Number</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="bet_report_body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php include('footer.php'); ?>
+
+<script>
+$(document).ready(function() {
+    // 1. Initialize Select2
+    if ($.fn.select2) {
+        $('.select2bs4').select2({ 
+            theme: 'bootstrap4', 
+            dropdownParent: $('#declareResultModal') 
+        });
+    }
+
+    // 2. Handle Declare Result Modal
+    $('.open-modal-btn').click(function() {
+        var market  = $(this).data('market');
+        var session = $(this).data('session');
+        var date    = $(this).data('date');
+        
+        $('#modal_market').val(market);
+        $('#modal_session').val(session);
+        $('#modal_date').val(date);
+        $('#modalGameName').text(market);
+        $('#modalSessionDisplay').text(session.toUpperCase());
+        
+        $('#modal_pana').val('').trigger('change');
+        $('#modal_digit').val('');
+        $('#declareResultModal').modal('show');
+    });
+
+    // 3. Handle Refund Modal
+    $('.open-refund-modal').click(function() {
+        var market  = $(this).data('market');
+        var session = $(this).data('session');
+        var date    = $(this).data('date');
+        
+        $('#refund_market').val(market);
+        $('#refund_session').val(session);
+        $('#refund_date').val(date);
+        $('#refundGameName').text(market);
+        $('#refundSessionDisplay').text(session.toUpperCase() + " SESSION");
+        $('#refundModal').modal('show');
+    });
+
+    // 4. Auto Calculate Digit from Panna
+    $('#modal_pana').change(function(){
+        var pana = $(this).val();
+        if(pana) {
+            var dsum = 0;
+            for (var i = 0; i < pana.length; i++) {
+                if (/[0-9]/.test(pana[i])) dsum += parseInt(pana[i]);
+            }
+            var dd = dsum.toString();
+            $('#modal_digit').val(dd.charAt(dd.length-1));
+        }
+    });
+});
+
+function showBetReport(market, date, session) {
+    var url = "report.php?market=" + encodeURIComponent(market) + 
+              "&date=" + date + 
+              "&session=" + session;
+    window.location.href = url;
+}
+</script>
+<script>
+$(document).ready(function() {
+    $('.open-modal-btn').click(function() {
+        var market  = $(this).data('market');
+        var session = $(this).data('session');
+        var dateVal = $(this).data('date'); 
+
+        // Format date for display: YYYY-MM-DD to DD-MM-YYYY
+        var d = new Date(dateVal);
+        var displayDate = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + d.getFullYear();
+
+        $('#disp_market_name').text(market);
+        $('#disp_date').text(displayDate);
+        $('#hidden_market').val(market);
+        $('#hidden_session').val(session);
+        $('#hidden_date').val(dateVal);
+        
+        $('#main_input').val('');
+        $('#resultPopup').css('display', 'flex');
+        $('#main_input').focus();
+    });
+
+    // This part does the "Ank" calculation before submitting
+    $('#popupForm').submit(function() {
+        var val = $('#main_input').val();
+        if(val.length > 0) {
+            // Calculate sum of digits for the Ank (e.g. 123 = 6)
+            var sum = 0;
+            for (var i = 0; i < val.length; i++) {
+                sum += parseInt(val[i]);
+            }
+            var ank = sum.toString().slice(-1); // Take last digit of sum
+            $('#hidden_digit').val(ank); 
+        }
+        return true; 
+    });
+});
+
+function closePopup() {
+    $('#resultPopup').hide();
+}
+</script>
+<script>
+$(document).ready(function() {
+    const validPannas = [
+        // 1
+        "128","137","146","236","245","290","380","470","489","560","579","678",
+        "100","119","155","227","335","344","399","588","669","777",
+    
+        // 2
+        "129","138","147","156","237","246","345","390","480","570","589","679",
+        "110","200","228","255","336","499","660","688","778","444",
+    
+        // 3
+        "120","139","148","157","238","247","256","346","490","580","670","689",
+        "166","229","300","337","355","445","599","779","788","111",
+    
+        // 4
+        "130","149","158","167","239","248","257","347","356","590","680","789",
+        "112","220","266","338","400","446","455","699","770","888",
+    
+        // 5
+        "140","159","168","230","249","258","267","348","357","456","690","780",
+        "113","122","177","339","366","447","500","799","889","555",
+    
+        // 6
+        "123","150","169","178","240","259","268","349","358","367","457","790",
+        "114","277","330","448","466","556","600","880","899","222",
+    
+        // 7
+        "124","160","179","250","269","278","340","359","368","458","467","890",
+        "115","133","188","223","377","449","557","566","700","999",
+    
+        // 8
+        "125","134","170","189","260","279","350","369","378","459","468","567",
+        "116","224","233","288","440","477","558","800","990","666",
+    
+        // 9
+        "126","135","180","234","270","289","360","379","450","469","478","568",
+        "117","144","199","225","388","559","577","667","900","333",
+    
+        // 0
+        "127","136","145","190","235","280","370","389","460","479","569","578",
+        "118","226","244","299","334","488","550","668","677","000"
+    ];
+
+    $('.open-modal-btn').click(function() {
+        var market  = $(this).data('market');
+        var session = $(this).data('session');
+        var dateVal = $(this).data('date'); 
+
+        var d = new Date(dateVal);
+        var displayDate = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + d.getFullYear();
+
+        $('#disp_market_name').text(market);
+        $('#disp_date').text(displayDate);
+        $('#hidden_market').val(market);
+        $('#hidden_session').val(session);
+        $('#hidden_date').val(dateVal);
+        
+        $('#main_input').val('');
+        $('#ank_val_display').text(''); 
+        $('#resultPopup').css('display', 'flex');
+        $('#main_input').focus();
+    });
+
+    // REAL-TIME VALIDATION AND ANK CALCULATION
+    $('#main_input').on('input', function() {
+        var val = $(this).val();
+
+        // Only process if 3 digits are entered
+        if(val.length === 3) {
+
+            // 1. Check if it is a valid Panna from the list
+            if (validPannas.includes(val)) {
+
+                // 2. Calculate sum of digits
+                var sum = 0;
+                for (var i = 0; i < val.length; i++) {
+                    sum += parseInt(val[i]);
+                }
+
+                // 3. Get the Unit Place (Last digit of the sum)
+                var ank = sum % 10; 
+                
+                $('#ank_val_display').text(ank).css('color', 'green');
+                $('#hidden_digit').val(ank);
+                $('.btn-ok').prop('disabled', false).css('opacity', '1');
+            } else {
+                // Not in the valid list
+                $('#ank_val_display').text('Invalid Panna').css('color', 'red');
+                $('#hidden_digit').val('');
+                $('.btn-ok').prop('disabled', true).css('opacity', '0.5');
+            }
+        } else if (val.length > 3) {
+            $('#ank_val_display').text('Max 3 Digits').css('color', 'red');
+            $('#hidden_digit').val('');
+            $('.btn-ok').prop('disabled', true).css('opacity', '0.5');
+        } else {
+            // Clearing or incomplete input
+            $('#ank_val_display').text('Enter 3 Digits').css('color', 'orange');
+            $('#hidden_digit').val('');
+            $('.btn-ok').prop('disabled', true).css('opacity', '0.5');
+        }
+    });
+
+    $('#popupForm').submit(function() {
+        var val = $('#main_input').val();
+        var ank = $('#hidden_digit').val();
+
+        if (val === "" || ank === "") {
+            alert("Please enter a valid 3-digit Panna from the chart.");
+            return false;
+        }
+        return true; 
+    });
+});
+
+function closePopup() {
+    $('#resultPopup').hide();
+}
+</script>
